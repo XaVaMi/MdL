@@ -1,0 +1,74 @@
+[
+  {
+    "image": "MemoryCards/10_carta.png",
+    "name": "10_carta"
+  },
+  {
+    "image": "MemoryCards/11_mapa.png",
+    "name": "11_mapa"
+  },
+  {
+    "image": "MemoryCards/12_puñal.png",
+    "name": "12_puñal"
+  },
+  {
+    "image": "MemoryCards/13_binoculares.png",
+    "name": "13_binoculares"
+  },
+  {
+    "image": "MemoryCards/14_camara.png",
+    "name": "14_camara"
+  },
+  {
+    "image": "MemoryCards/15_veneno.png",
+    "name": "15_veneno"
+  },
+  {
+    "image": "MemoryCards/16_pisadas.png",
+    "name": "16_pisadas"
+  },
+  {
+    "image": "MemoryCards/17_llave.png",
+    "name": "17_llave"
+  },
+  {
+    "image": "MemoryCards/18_esposas.png",
+    "name": "18_esposas"
+  },
+  {
+    "image": "MemoryCards/1_lupa.png",
+    "name": "1_lupa"
+  },
+  {
+    "image": "MemoryCards/2_pipa.png",
+    "name": "2_pipa"
+  },
+  {
+    "image": "MemoryCards/3_deerstalker.png",
+    "name": "3_deerstalker"
+  },
+  {
+    "image": "MemoryCards/4_huella.png",
+    "name": "4_huella"
+  },
+  {
+    "image": "MemoryCards/5_silueta.png",
+    "name": "5_silueta"
+  },
+  {
+    "image": "MemoryCards/6_libreta.png",
+    "name": "6_libreta"
+  },
+  {
+    "image": "MemoryCards/7_reloj.png",
+    "name": "7_reloj"
+  },
+  {
+    "image": "MemoryCards/8_mustacho.png",
+    "name": "8_mustacho"
+  },
+  {
+    "image": "MemoryCards/9_pistola.png",
+    "name": "9_pistola"
+  }
+]
