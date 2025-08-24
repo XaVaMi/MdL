@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <title>La memòria del detectiu</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Roboto+Slab:wght@400;700&display=swap');
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Roboto Slab', serif;
+      background-color: #f3e9d2;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #d6c6a6,
+        #d6c6a6 2px,
+        transparent 2px,
+        transparent 10px
+      );
+      color: #3e2f1c;
+    }
+
+    h1, h2 {
+      font-family: 'Special Elite', monospace;
+      color: #5b4226;
+      text-shadow: 1px 1px 2px #a08a64;
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 56px;
+      margin-bottom: 0;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border-bottom: 3px solid #5b4226;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 44px;
+      margin-bottom: 25px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 600;
+      color: #6e5a34;
+      margin-top: 5px;
+      font-style: italic;
+      text-shadow: 1px 1px 0 #e7d9b3;
+    }
+
+    .actions button,
+    #startScreen button,
+    #winScreen button {
+      padding: 12px 28px;
+      font-size: 20px;
+      border-radius: 12px;
+      background-color: #5b4226;
+      color: #f9f1d0;
+      border: 2px solid #a89061;
+      cursor: pointer;
+      box-shadow: 2px 2px 8px #3e2f1c99;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: 'Special Elite', monospace;
+      letter-spacing: 1.5px;
+    }
+    .actions button:hover,
+    #startScreen button:hover,
+    #winScreen button:hover {
+      background-color: #a89061;
+      color: #362c15;
+    }
+
+    .grid-container {
+      display: grid;
+      justify-content: center;
+      grid-gap: 12px;
+      grid-template-columns: repeat(6, 80px);
+      grid-template-rows: repeat(6, 80px);
+      padding: 20px;
+    }
+
+    .front-image {
+      width: 55px;
+      height: 55px;
+      filter: drop-shadow(1.5px 1.5px 1.5px #7f6a3cbb);
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+      box-shadow: 0 0 12px 2px #a8906199;
+    }
+
+    .front, .back {
+      backface-visibility: hidden;
+      position: absolute;
+      border-radius: 12px;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .card {
+      height: 80px;
+      width: 80px;
+      border-radius: 12px;
+      background-color: #ede3c7;
+      box-shadow: inset 0 0 12px #b4a67daa;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.5s ease-in-out;
+      cursor: pointer;
+      border: 2px solid #8c7b4d;
+    }
+
+    .card .front {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform: rotateY(180deg);
+      background-color: #f8f2da;
+      border: 2px solid #8c7b4d;
+      box-shadow: inset 0 0 6px #cfc39788;
+    }
+
+    .card .back {
+      background: linear-gradient(135deg, #8c7b4d 0%, #b8a66e 100%);
+      backface-visibility: hidden;
+      border: 2px solid #715f36;
+      box-shadow: inset 0 0 15px #5d4b16;
+    }
+
+    #startScreen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f3e9d2;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #d6c6a6,
+        #d6c6a6 2px,
+        transparent 2px,
+        transparent 10px
+      );
+      color: #5b4226;
+      text-shadow: 1px 1px 3px #e7d9b3aa;
+    }
+    #startScreen button {
+      margin-top: 20px;
+    }
+
+    #winScreen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(91, 66, 38, 0.95);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 1000;
+      font-family: 'Special Elite', monospace;
+      color: #f9f1d0;
+      text-shadow: 2px 2px 5px #3e2f1c;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="startScreen">
+  <h1>La memòria del detectiu</h1>
+  <button onclick="startGame()">START</button>
+</div>
+
+<div id="gameArea" style="display:none;">
+  <h1>La memòria del detectiu</h1>
+  <p>Temps restant: <span id="timer">180</span> segons</p>
+  <div class="grid-container"></div>
+</div>
+
+<div id="winScreen">
+  <h2 id="winMessage"></h2>
+  <button onclick="restartGame()">Jugar de nou</button>
+</div>
+
+<script>
+  const gridContainer = document.querySelector(".grid-container");
+  let cardsData = [];
+  let cards = [];
+  let firstCard, secondCard;
+  let lockBoard = false;
+  let matchedPairs = 0;
+  const maxTime = 180;
+  let timer = maxTime;
+  let timerInterval;
+  let totalPairs = 0;
+
+  // 📥 Cargar JSON desde GitHub
+  fetch("https://raw.githubusercontent.com/XaVaMi/MdL/main/data/cards.json")
+    .then(response => response.json())
+    .then(data => {
+      cardsData = data;
+      totalPairs = cardsData.length;
+    });
+
+  function generateCards() {
+    return [...cardsData, ...cardsData];
+  }
+
+  function startGame() {
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("gameArea").style.display = "block";
+    document.getElementById("winScreen").style.display = "none";
+    matchedPairs = 0;
+    timer = maxTime;
+    document.getElementById("timer").textContent = timer;
+    lockBoard = false;
+    clearInterval(timerInterval);
+    setupCards();
+    timerInterval = setInterval(() => {
+      timer--;
+      document.getElementById("timer").textContent = timer;
+      if (timer <= 0) {
+        clearInterval(timerInterval);
+        endGameTimeout();
+      }
+    }, 1000);
+  }
+
+  function setupCards() {
+    cards = generateCards();
+    shuffleCards();
+    gridContainer.innerHTML = "";
+    for (let card of cards) {
+      const cardElement = document.createElement("div");
+      cardElement.classList.add("card");
+      cardElement.setAttribute("data-name", card.name);
+      cardElement.innerHTML = `
+        <div class="front">
+          <img class="front-image" src="${card.image}" />
+        </div>
+        <div class="back"></div>
+      `;
+      gridContainer.appendChild(cardElement);
+      cardElement.addEventListener("click", flipCard);
+    }
+  }
+
+  function shuffleCards() {
+    let currentIndex = cards.length, randomIndex, temporaryValue;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      temporaryValue = cards[currentIndex];
+      cards[currentIndex] = cards[randomIndex];
+      cards[randomIndex] = temporaryValue;
+    }
+  }
+
+  function flipCard() {
+    if (lockBoard) return;
+    if (this === firstCard) return;
+    this.classList.add("flipped");
+    if (!firstCard) {
+      firstCard = this;
+      return;
+    }
+    secondCard = this;
+    lockBoard = true;
+    checkForMatch();
+  }
+
+  function checkForMatch() {
+    let isMatch = firstCard.dataset.name === secondCard.dataset.name;
+    isMatch ? disableCards() : unflipCards();
+  }
+
+  function disableCards() {
+    firstCard.removeEventListener("click", flipCard);
+    secondCard.removeEventListener("click", flipCard);
+    matchedPairs++;
+    resetBoard();
+    if (matchedPairs === totalPairs) {
+      clearInterval(timerInterval);
+      setTimeout(() => {
+        document.getElementById("winMessage").textContent = `Has guanyat en ${maxTime - timer} segons!`;
+        document.getElementById("winScreen").style.display = "flex";
+        lockBoard = true;
+      }, 500);
+    }
+  }
+
+  function unflipCards() {
+    setTimeout(() => {
+      firstCard.classList.remove("flipped");
+      secondCard.classList.remove("flipped");
+      resetBoard();
+    }, 1000);
+  }
+
+  function resetBoard() {
+    [firstCard, secondCard] = [null, null];
+    lockBoard = false;
+  }
+
+  function endGameTimeout() {
+    lockBoard = true;
+    setTimeout(() => {
+      document.getElementById("winMessage").textContent = "S'ha acabat el temps. Torna-ho a intentar!";
+      document.getElementById("winScreen").style.display = "flex";
+    }, 500);
+  }
+
+  function restartGame() {
+    startGame();
+  }
+</script>
+
+</body>
+</html>
