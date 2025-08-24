@@ -206,7 +206,7 @@
   let timerInterval;
   let totalPairs = 0;
 
-  // 📥 Cargar JSON desde GitHub
+  // Carregar JSON des de GitHub
   fetch("https://raw.githubusercontent.com/XaVaMi/MdL/main/data/cards.json")
     .then(response => response.json())
     .then(data => {
@@ -294,7 +294,7 @@
     if (matchedPairs === totalPairs) {
       clearInterval(timerInterval);
       setTimeout(() => {
-        document.getElementById("winMessage").textContent = `Has guanyat en ${maxTime - timer} segons!`;
+        document.getElementById("winMessage").textContent = `Has guanyat en ${maxTime - timer} segons! Les coordenades finals són N41º XX.XXX E002º YY.YYY`;
         document.getElementById("winScreen").style.display = "flex";
         lockBoard = true;
       }, 500);
