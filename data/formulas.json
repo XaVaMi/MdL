@@ -1,0 +1,38 @@
+[
+  {
+    "image": "ChemStructure/1_aconitina.png",
+    "name": "1_aconitina"
+  },
+  {
+    "image": "ChemStructure/2_arsenic.png",
+    "name": "2_arsenic"
+  },
+  {
+    "image": "ChemStructure/3_atropina.png",
+    "name": "3_atropina"
+  },
+  {
+    "image": "ChemStructure/4_barbital.png",
+    "name": "4_barbital"
+  },
+  {
+    "image": "ChemStructure/5_cianur.png",
+    "name": "5_cianur"
+  },
+  {
+    "image": "ChemStructure/6_digoxina.png",
+    "name": "6_digoxina"
+  },
+  {
+    "image": "ChemStructure/7_estricnina.png",
+    "name": "7_estricnina"
+  },
+  {
+    "image": "ChemStructure/8_morfina.png",
+    "name": "8_morfina"
+  },
+  {
+    "image": "ChemStructure/9_oxalat.png",
+    "name": "9_oxalat"
+  }
+]
